@@ -70,8 +70,8 @@
                 <div id="waveform"></div>
                     <div class="control-bar" style="border-top: 1px solid rgb(127, 160, 223); display: flex; justify-content: center; width:30rem;">
                        <div style="margin: 10px">
-                        <img class = "btn" src="assests/play.png" alt="play" id="playBtn" title="Play / Pause" style="width:1.5rem;">
-                        <img class = "btn" src="assests/stop.png" alt="stop" id="stopBtn" title="Stop" style="width:1.5rem">
+                        <img class = "btn" src="assets/play.png" alt="play" id="playBtn" title="Play / Pause" style="width:1.5rem;">
+                        <img class = "btn" src="assets/stop.png" alt="stop" id="stopBtn" title="Stop" style="width:1.5rem">
                     </div>
                 </div>
                 <button class="collapsible" id ="clbtn">Select a bird specie to compare with Mitch audio samples</button>
@@ -80,16 +80,16 @@
                     <div id="waveform2"></div>
                         <div class="control-bar" style="border-top: 1px solid rgb(127, 160, 223); display: flex; justify-content: center; width:30rem;">
                         <div style="margin: 10px">
-                            <img class = "btn" src="assests/play.png" alt="play" id="playBtn2" title="Play / Pause" style="width:1.5rem;">
-                            <img class = "btn" src="assests/stop.png" alt="stop" id="stopBtn2" title="Stop" style="width:1.5rem">
+                            <img class = "btn" src="assets/play.png" alt="play" id="playBtn2" title="Play / Pause" style="width:1.5rem;">
+                            <img class = "btn" src="assets/stop.png" alt="stop" id="stopBtn2" title="Stop" style="width:1.5rem">
                         </div>
                     </div>
                     <div style="height: 50px; display: flex; justify-content: center; border-bottom: 1px solid rgb(127, 160, 223);"><h3 id="mitch2">Mitch Song</h3></div>
                     <div id="waveform3"></div>
                         <div class="control-bar" style="border-top: 1px solid rgb(127, 160, 223); display: flex; justify-content: center; width:30rem;">
                         <div style="margin: 10px">
-                            <img class = "btn" src="assests/play.png" alt="play" id="playBtn3" title="Play / Pause" style="width:1.5rem;">
-                            <img class = "btn" src="assests/stop.png" alt="stop" id="stopBtn3" title="Stop" style="width:1.5rem">
+                            <img class = "btn" src="assets/play.png" alt="play" id="playBtn3" title="Play / Pause" style="width:1.5rem;">
+                            <img class = "btn" src="assets/stop.png" alt="stop" id="stopBtn3" title="Stop" style="width:1.5rem">
                         </div>
                     </div>
                 </div>
@@ -163,46 +163,46 @@
     playBtn.onclick = function(){
         wavesurfer.playPause();
         if(playBtn.src.match("play")){
-            playBtn.src  = "assests/pause.png";
+            playBtn.src  = "assets/pause.png";
         }
         else{
-            playBtn.src = "assests/play.png"
+            playBtn.src = "assets/play.png"
         }
     }
         
     stopBtn.onclick = function(){
         wavesurfer.stop();
-        playBtn.src = "assests/play.png"
+        playBtn.src = "assets/play.png"
     }
 
     playBtn2.onclick = function(){
         wavesurfer2.playPause();
         if(playBtn2.src.match("play")){
-            playBtn2.src  = "assests/pause.png";
+            playBtn2.src  = "assets/pause.png";
         }
         else{
-            playBtn2.src = "assests/play.png"
+            playBtn2.src = "assets/play.png"
         }
     }
         
     stopBtn2.onclick = function(){
         wavesurfer2.stop();
-        playBtn2.src = "assests/play.png"
+        playBtn2.src = "assets/play.png"
     }
 
     playBtn3.onclick = function(){
         wavesurfer3.playPause();
         if(playBtn3.src.match("play")){
-            playBtn3.src  = "assests/pause.png";
+            playBtn3.src  = "assets/pause.png";
         }
         else{
-            playBtn.src = "assests/play.png"
+            playBtn.src = "assets/play.png"
         }
     }
         
     stopBtn3.onclick = function(){
         wavesurfer3.stop();
-        playBtn3.src = "assests/play.png"
+        playBtn3.src = "assets/play.png"
     }
         
     var m = document.getElementById("species");
