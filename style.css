@@ -1,5 +1,6 @@
 
 .container {
+    position: relative;
     margin-left: 8%;
     display: flex;
 }
@@ -40,6 +41,7 @@ select {
     overflow: hidden;
  }
  .selectKasios {
+    position: fixed;
     text-align: center;
     margin-left:5%;
     border: none;
@@ -48,6 +50,13 @@ select {
     background: #ffffff;
     overflow: hidden;
  }
+
+option::after{
+    background-color: rgb(166, 175, 255);
+}
+option::hover {
+    background-color: gray;
+  }
 .option { 
     text-align: center;
     padding: 10px;
@@ -124,8 +133,40 @@ select {
 
  svg {
     margin: 5%;
+    margin-top: 3%;
     background: url('./Lekagul Roadways 2018.bmp') no-repeat;
     background-size: 100% auto;
   }
 
- 
+.svgTip {
+    width: 30vw; 
+    border:solid;
+    border-width: 2px;
+    margin-top:3%;margin-left:5%;
+    min-width: 30vw;
+    min-height: 4vh;
+}
+
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  .active, .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
+  }

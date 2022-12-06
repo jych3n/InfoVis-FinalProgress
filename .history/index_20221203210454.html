@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="d3.v3.min.js"></script>
+        <script src="https://unpkg.com/wavesurfer.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+<body>
+
+<div class="header"><h1>Header</h1></div>
+
+<div class = "container">
+    <div class="select">
+    <select name="species" id="species" size="21">
+        <option class="option" value = "0" selected="selected">All</option><option disabled class="separator"></option>
+        <option class="option" value="1">Rose-crested Blue Pipit</option><option disabled class="separator"></option>
+        <option class="option" value="2">Bent-beak Riffraff</option><option disabled class="separator"></option>
+        <option class="option" value="3">Blue-collared Zipper</option><option disabled class="separator"></option>
+        <option class="option" value="4">Bombadil</option><option disabled class="separator"></option>
+        <option class="option" value="5">Broad-winged Jojo</option><option disabled class="separator"></option>
+        <option class="option" value="6">Canadian Cootamum</option><option disabled class="separator"></option>
+        <option class="option" value="7">Carries Champagne Pipit</option><option disabled class="separator"></option>
+        <option class="option" value="8">Darkwing Sparrow</option><option disabled class="separator"></option>
+        <option class="option" value="9">Eastern Corn Skeet</option><option disabled class="separator"></option>
+        <option class="option" value="10">Green-tipped Scarlet Pipit</option><option disabled class="separator"></option>
+        <option class="option" value="11">Lesser Birchbeere</option><option disabled class="separator"></option>
+        <option class="option" value="12">Orange Pine Plover</option><option disabled class="separator"></option>
+        <option class="option" value="13">Ordinary Snape</option><option disabled class="separator"></option>
+        <option class="option" value="14">Pinkfinch</option><option disabled class="separator"></option>
+        <option class="option" value="15">Purple Tooting Tout</option><option disabled class="separator"></option>
+        <option class="option" value="16">Qax</option><option disabled class="separator"></option>
+        <option class="option" value="17">Queenscoat</option><option disabled class="separator"></option>
+        <option class="option" value="18">Scrawny Jay</option><option disabled class="separator"></option>
+        <option class="option" value="19">Vermillion Trillian</option>
+    </select>
+    </div>
+    <div>
+    <div class="animated fadeInRight"id ="svgHere"><div class="svgTip"id ="svgTip" style="width: 200px"></div>
+</div>
+</div>
+    <div class="selectKasios">
+        <select name="kasios" id="kasios" size="16">
+            <option class="option" value = "0" selected="selected">Kasios 1</option><option disabled class="separator"></option>
+            <option class="option" value="1">Kasios 2</option><option disabled class="separator"></option>
+            <option class="option" value="2">Kasios 3</option><option disabled class="separator"></option>
+            <option class="option" value="3">Kasios 4</option><option disabled class="separator"></option>
+            <option class="option" value="4">Kasios 5</option><option disabled class="separator"></option>
+            <option class="option" value="5">Kasios 6</option><option disabled class="separator"></option>
+            <option class="option" value="6">Kasios 7</option><option disabled class="separator"></option>
+            <option class="option" value="7">Kasios 8</option><option disabled class="separator"></option>
+            <option class="option" value="8">Kasios 9</option><option disabled class="separator"></option>
+            <option class="option" value="9">Kasios 10</option><option disabled class="separator"></option>
+            <option class="option" value="10">Kasios 11</option><option disabled class="separator"></option>
+            <option class="option" value="11">Kasios 12</option><option disabled class="separator"></option>
+            <option class="option" value="12">Kasios 13</option><option disabled class="separator"></option>
+            <option class="option" value="13">Kasios 14</option><option disabled class="separator"></option>
+            <option class="option" value="14">Kasios 15</option>
+        </select>
+    </div>
+        <div class="music-player" style="margin: 2rem">
+            <div class="info" style="background-color: rgb(249, 247, 247);">
+                <div style="height: 50px; display: flex; justify-content: center; border-bottom: 1px solid rgb(127, 160, 223);"><h3 id="kasiosNumber">Kasios 1</h3></div>
+                <div id="waveform"></div>
+                    <div class="control-bar" style="border-top: 1px solid rgb(127, 160, 223); display: flex; justify-content: center; width:25rem;">
+                       <div style="margin: 10px">
+                        <img class = "btn" src="assests/play.png" alt="play" id="playBtn" title="Play / Pause" style="width:1.5rem;">
+                        <img class = "btn" src="assests/stop.png" alt="stop" id="stopBtn" title="Stop" style="width:1.5rem">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    playBtn = document.getElementById("playBtn");
+    stopBtn = document.getElementById("stopBtn");
+    volumeBtn = document.getElementById("volumeBtn");
+
+    var wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        fillparent: true,
+        waveColor: 'rgb(127, 160, 223)',
+        progressColor: 'blue',
+        barHeight:6
+    });
+    var kasioSelect = document.getElementById("kasios");
+    
+    kasioSelect.addEventListener("change", function() {
+        let audioX = 1;
+        audioX += parseInt(kasioSelect.value);
+        wavesurfer.load('Test Birds from Kasios/' + audioX +'.mp3');
+        document.getElementById("kasiosNumber").innerText = "Kasios " + audioX;
+    })
+
+    playBtn.onclick = function(){
+        wavesurfer.playPause();
+        if(playBtn.src.match("play")){
+            playBtn.src  = "assests/pause.png";
+        }
+        else{
+            playBtn.src = "assests/play.png"
+        }
+    }
+        
+    stopBtn.onclick = function(){
+        wavesurfer.stop();
+        playBtn.src = "assests/play.png"
+    }
+        
+    var m = document.getElementById("species");
+    window.onload = (event) => {
+        m.dispatchEvent(new Event('change'));
+        wavesurfer.load('Test Birds from Kasios/1.mp3');
+    };
+    
+    function toggle(){
+        var element = document.getElementById("svgHere"); 
+        element.classList.remove("fadeInRight"); 
+        void element.offsetWidth; 
+
+        element.classList.add("fadeInRight");
+    }
+    m.addEventListener("change", function() {
+        switch (m.value) {
+        case "0":
+            loadmap("All");
+        break;
+        case "1":
+            loadmap("Rose-crested Blue Pipit");
+        break;
+        case "2":
+            loadmap("Bent-beak Riffraff");
+        break;
+        case "3":
+            loadmap("Blue-collared Zipper");
+        break;
+        case "4":
+            loadmap("Bombadil")
+        break;
+        case "5":
+            loadmap("Broad-winged Jojo");
+        break;
+        case "6":
+            loadmap("Canadian Cootamum");
+        break;
+        case "7":
+            loadmap("Carries Champagne Pipit");
+        break;
+        case "8":
+            loadmap("Darkwing Sparrow");
+        break;
+        case "9":
+            loadmap("Eastern Corn Skeet");
+        break;
+        case "10":
+            loadmap("Green-tipped Scarlet Pipit");
+        break;
+        case "11":
+            loadmap("Lesser Birchbeere");
+        break;
+        case "12":
+            loadmap("Orange Pine Plover");
+        break;
+        case "13":
+            loadmap("Ordinary Snape");
+        break;
+        case "14":
+            loadmap("Pinkfinch");
+        break;
+        case "15":
+            loadmap("Purple Tooting Tout");
+        break;
+        case "16":
+            loadmap("Qax");
+        break;
+        case "17":
+            loadmap("Queenscoat");
+        break;
+        case "18":
+            loadmap("Scrawny Jay");
+        break;
+        case "19":
+            loadmap("Vermillion Trillian");
+        break;
+        default:
+            loadmap("All");
+    }
+    // create a tooltip
+    var tooltipdiv = d3.select("#svgTip");
+        var Tooltip = tooltipdiv.style("opacity", 0)
+      .attr("class", "tooltip");
+
+      // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      var mousemove = function(d) {
+        Tooltip
+          .html("ID: " + d.FileID
+                + "\xa0\xa0\xa0" + d.English_name
+                + "\xa0\xa0 Vocalization Type: " + d.Vocalization_type
+                + "\xa0\xa0 Quality: " + d.Quality
+                + "\xa0\xa0 Time: " + d.Time
+                + "\xa0\xa0 Date: " + d.Date
+                + "\xa0\xa0 X: " + d.X
+                + " Y: " + d.Y
+            )
+          .style("left", d3.select(this).attr("cx") + "px")     
+  .style("top", d3.select(this).attr("cy") + "px");
+      }
+      var mouseleave = function(d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
+    function loadmap(n)
+    {
+        toggle();
+        d3.select("svg").remove(); 
+        var w = 600;
+		var h = 600;
+		var padding = 0;
+        var dataset = [];
+
+        d3.csv("AllBirdsv4(Cleaned ALL).csv", function(data) {
+        dataset = data;
+		// calculate x average
+
+		var svg = d3.select("#svgHere").append("svg")
+			.attr("width", w + padding)
+			.attr("height", h + padding)
+			.attr("transform", "translate(" + padding + "," + 0 + ")")
+
+		// create x,y linear scales
+		var x = d3.scale.linear()
+			.domain([0, 199])
+			.range([padding, w - padding]);
+
+		var y = d3.scale.linear()
+			.domain([0, 199])
+			.range([h - padding, padding]);
+
+            // draw circles
+        svg.selectAll("plot")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d,i) { return x(dataset[i]["X"]); } )
+            .attr("cy", function (d,i) { return y(dataset[i]["Y"]); } )
+            .attr("r", 3)
+			.style("stroke", function (d, i) {
+				return (dataset[i]["English_name"] == n || n == "All")? "blue":"rgb(255, 15, 115)";})
+			.style("fill", function (d,i)
+            {
+                return (dataset[i]["English_name"] == n || n == "All")? "rgb(177, 210, 255)":"none";})
+            .style("opacity", function (d,i)
+            {
+                if (dataset[i]["English_name"] == n || n == "All")
+                {
+                    return 1.0;
+                }
+                else
+                {
+                    return 0.2 ;
+                }
+            })
+            .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+            
+        })
+
+}
+});
+</script>
+</body>
+</html>
