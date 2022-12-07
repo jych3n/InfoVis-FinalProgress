@@ -421,7 +421,35 @@
         Tooltip
           .style("opacity", 0)
       }
+    const parseCsv = csv => {
+        let lines = csv.split("\n");
+        const header = lines.shift().split(",")
+        return  lines.map(line => {
+            const bits = JSON.parse("[" + line + "]")
+            let obj = {};
+            header.forEach((h, i) => obj[h] = bits[i])
+            return obj;
+        });
+    };
 
+    const csv = `ID,X,Y
+        1,140,119
+        2,63,153
+        3,70,136
+        4,78,150
+        5,60,90
+        6,126,103
+        7,71,121
+        8,78,62
+        9,61,145
+        10,45,39
+        11,132,106
+        12,61,20
+        13,35,160
+        14,40,125
+        15,110,121`
+
+    let testBirdsData = parseCsv(csv);
     function loadmap(n)
     {
         toggle();
@@ -476,10 +504,51 @@
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
-            
-        })
 
+        svg.selectAll("plot")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d,i) { return x(dataset[i]["X"]); } )
+            .attr("cy", function (d,i) { return y(dataset[i]["Y"]); } )
+            .attr("r", 3)
+			.style("stroke", function (d, i) {
+				return (dataset[i]["English_name"] == n || n == "All")? "blue":"rgb(255, 15, 115)";})
+			.style("fill", function (d,i)
+            {
+                return (dataset[i]["English_name"] == n || n == "All")? "rgb(177, 210, 255)":"none";})
+            .style("opacity", function (d,i)
+            {
+                if (dataset[i]["English_name"] == n || n == "All")
+                {
+                    return 1.0;
+                }
+                else
+                {
+                    return 0.2 ;
+                }
+            })
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+            var selectedKasios = document.getElementById("kasios");
+            selectedKasios.addEventListener("click", function() {
+                plotClicked(selectedKasios.value)
+            })
+            function plotClicked(value) {
+                svg.selectAll("plot")
+                .data(testBirdsData)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d,i) { return x(testBirdsData[value]["X"]); } )
+                .attr("cy", function (d,i) { return y(testBirdsData[value]["Y"]); } )
+                .attr("r", 12)
+                .style("stroke", "red")
+                .style("fill", "yellow")
+            }    
+        })
 }
+
 });
 </script>
 </body>
