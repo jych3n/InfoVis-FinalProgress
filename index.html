@@ -47,7 +47,9 @@
 </div>
     <div class="selectKasios">
         <select name="kasios" id="kasios" size="16">
-            <option class="option" value = "0" selected="selected">Kasios 1</option><option disabled class="separator"></option>
+            <option class="option" value = "15" selected="selected">All</option><option disabled class="separator"></option>
+            <option class="option" value = "16" >None</option><option disabled class="separator"></option>
+            <option class="option" value = "0">Kasios 1</option><option disabled class="separator"></option>
             <option class="option" value="1">Kasios 2</option><option disabled class="separator"></option>
             <option class="option" value="2">Kasios 3</option><option disabled class="separator"></option>
             <option class="option" value="3">Kasios 4</option><option disabled class="separator"></option>
@@ -66,7 +68,7 @@
     </div>
         <div class="animated fadeInRight" id="kasiosfade">
             <div class="info" style="background-color: rgb(249, 247, 247);">
-                <div style="height: 50px; display: flex; justify-content: center; border-bottom: 1px solid rgb(127, 160, 223);"><h3 id="kasiosNumber">Kasios 1</h3></div>
+                <div style="height: 50px; display: flex; justify-content: center; border-bottom: 1px solid rgb(127, 160, 223);"><h3 id="kasiosNumber">Select Kasios Sample</h3></div>
                 <div id="waveform"></div>
                     <div class="control-bar" style="border-top: 1px solid rgb(127, 160, 223); display: flex; justify-content: center; width:30rem;">
                        <div style="margin: 10px">
@@ -93,9 +95,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="collapsible" id ="pdbtn">Prediction Results</button>
-                <div class="content" id="pred"><h3>Rose Crested Blue Pipit   :  No</h3></div>
             </div>
+            <br></br>
+                <button class="collapsible" id ="pdbtn">Prediction Results</button>
+                <div class="content"><h3 id="pred">Rose Crested Blue Pipit   :  No</h3></div>
         </div>
     </div>
 </div>
@@ -118,6 +121,8 @@
         } 
     });
     }
+
+    // Create Audio Visuals
     playBtn = document.getElementById("playBtn");
     stopBtn = document.getElementById("stopBtn");
     playBtn2 = document.getElementById("playBtn2");
@@ -125,6 +130,7 @@
     playBtn3 = document.getElementById("playBtn3");
     stopBtn3 = document.getElementById("stopBtn3");
 
+    // Kasios Audio
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
         fillparent: true,
@@ -133,7 +139,7 @@
         barHeight:5,
         height:100
     });
-    
+    // Mitch Call
     var wavesurfer2 = WaveSurfer.create({
         container: '#waveform2',
         fillparent: true,
@@ -142,6 +148,7 @@
         barHeight:5,
         height:100
     });
+    // Mitch Song
     var wavesurfer3 = WaveSurfer.create({
         container: '#waveform3',
         fillparent: true,
@@ -150,16 +157,29 @@
         barHeight:5,
         height:100
     });
-    var kasioSelect = document.getElementById("kasios");
     
+    var kasioSelect = document.getElementById("kasios");
+    var kselected = "All";
+    
+    // handle event when a kasios sample is selected
     kasioSelect.addEventListener("change", function() {
         let audioX = 1;
         audioX += parseInt(kasioSelect.value);
         toggleK();
-        wavesurfer.load('Test Birds from Kasios/' + audioX +'.mp3');
-        document.getElementById("kasiosNumber").innerText = "Kasios " + audioX;
+        if (audioX < 16)
+        {
+            wavesurfer.load('Test Birds from Kasios/' + audioX +'.mp3');
+            document.getElementById("kasiosNumber").innerText = "Kasios " + audioX;
+        }
+        kselected = kasioSelect.value;
+        loadmap(name,kselected);
+        if (audioX == 2 || audioX == 13)
+        document.getElementById("pred").innerText = "Rose Crested Blue Pipit   :  Yes";
+        else
+        document.getElementById("pred").innerText = "Rose Crested Blue Pipit   :  No";
     })
 
+    // audio button functions
     playBtn.onclick = function(){
         wavesurfer.playPause();
         if(playBtn.src.match("play")){
@@ -169,7 +189,7 @@
             playBtn.src = "assets/play.png"
         }
     }
-        
+
     stopBtn.onclick = function(){
         wavesurfer.stop();
         playBtn.src = "assets/play.png"
@@ -208,9 +228,9 @@
     var m = document.getElementById("species");
     window.onload = (event) => {
         m.dispatchEvent(new Event('change'));
-        wavesurfer.load('Test Birds from Kasios/1.mp3');
     };
     
+    // fade from right animation for map
     function toggle(){
         var element = document.getElementById("svgHere"); 
         element.classList.remove("fadeInRight"); 
@@ -218,192 +238,33 @@
         element.classList.add("fadeInRight");
     }
 
+    // fade from right animation for kasios
     function toggleK(){
         var element = document.getElementById("kasiosfade"); 
         element.classList.remove("fadeInRight"); 
         void element.offsetWidth; 
         element.classList.add("fadeInRight");
     }
-    m.addEventListener("change", function() {
-        switch (m.value) {
-        case "0":
-            loadmap("All");
-            wavesurfer2.empty();
-            wavesurfer3.empty();
-            clbtn.innerText = "Select a bird specie";
-            calltitle.innerText = "Call";
-            songtitle.innerText = "Song";
-        break;
-        case "1":
-            loadmap("Rose-crested Blue Pipit");
-            wavesurfer2.load('Mitch Samples/Rose-Crested-Blue-Pipit-293916.mp3');
-            wavesurfer3.load('Mitch Samples/Rose-Crested-Blue-Pipit-293914.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Rose-crested Blue Pipit";
-            calltitle.innerText = "293916 Rose-crested Blue Pipit Call";
-            songtitle.innerText = "293916 Rose-crested Blue Pipit Song";
-        break;
-        case "2":
-            loadmap("Bent-beak Riffraff");
-            wavesurfer2.load('Mitch Samples/Bent-Beak-Riffraff-20422.mp3');
-            wavesurfer3.load('Mitch Samples/Bent-Beak-Riffraff-35360.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Bent-beak Riffraff";
-            calltitle.innerText = "20422 Bent-beak Riffraff Call";
-            songtitle.innerText = "35360 Bent-beak Riffraff Song";
-        break;
-        case "3":
-            loadmap("Blue-collared Zipper");
-            wavesurfer2.load('Mitch Samples/Blue-collared-Zipper-374413.mp3');
-            wavesurfer3.load('Mitch Samples/Blue-collared-Zipper-341352.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Blue-collared Zipper";
-            calltitle.innerText = "374413 Blue-collared Zipper Call";
-            songtitle.innerText = "341352 Blue-collared Zipper Song";
-        break;
-        case "4":
-            loadmap("Bombadil")
-            wavesurfer2.load('Mitch Samples/Bombadil-317206.mp3');
-            wavesurfer3.load('Mitch Samples/Bombadil-314298.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Bombadil";
-            calltitle.innerText = "317206 Bombadil Call";
-            songtitle.innerText = "314298 Bombadil Song";
-        break;
-        case "5":
-            loadmap("Broad-winged Jojo");
-            wavesurfer2.load('Mitch Samples/Broad-winged-Jojo-33567.mp3');
-            wavesurfer3.load('Mitch Samples/Broad-winged-Jojo-33565.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Broad-winged Jojo";
-            calltitle.innerText = "33567 Broad-winged Jojo Call";
-            songtitle.innerText = "33565 Broad-winged Jojo Song";
-        break;
-        case "6":
-            loadmap("Canadian Cootamum");
-            wavesurfer2.load('Mitch Samples/Canadian-Cootamum-325432.mp3');
-            wavesurfer3.load('Mitch Samples/Canadian-Cootamum-313736.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Canadian Cootamum";
-            calltitle.innerText = "325432 Canadian Cootamum Call";
-            songtitle.innerText = "313736 Canadian Cootamum Song";
-        break;
-        case "7":
-            loadmap("Carries Champagne Pipit");
-            wavesurfer2.load('Mitch Samples/Carries-Champagne-Pipit-197379.mp3');
-            wavesurfer3.load('Mitch Samples/Carries-Champagne-Pipit-197378.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Carries Champagne Pipit";
-            calltitle.innerText = "197379 Carries Champagne Pipit Call";
-            songtitle.innerText = "197378 Carries Champagne Pipit Song";
-        break;
-        case "8":
-            loadmap("Darkwing Sparrow");
-            wavesurfer2.load('Mitch Samples/Darkwing-Sparrow-404159.mp3');
-            wavesurfer3.load('Mitch Samples/Darkwing-Sparrow-405192.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Darkwing Sparrow";
-            calltitle.innerText = "404159 Darkwing Sparrow Call";
-            songtitle.innerText = "405192 Darkwing Sparrow Song";
-        break;
-        case "9":
-            loadmap("Eastern Corn Skeet");
-            wavesurfer2.load('Mitch Samples/Eastern-Corn-Skeet-179720.mp3');
-            wavesurfer3.load('Mitch Samples/Eastern-Corn-Skeet-178126.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Eastern Corn Skeet";
-            calltitle.innerText = "179720 Eastern Corn Skeet Call";
-            songtitle.innerText = "178126 Eastern Corn Skeet Song";
-        break;
-        case "10":
-            loadmap("Green-tipped Scarlet Pipit");
-            wavesurfer2.load('Mitch Samples/Green-Tipped-Scarlet-Pipit-334189.mp3');
-            wavesurfer3.load('Mitch Samples/Green-Tipped-Scarlet-Pipit-319588.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Green-tipped Scarlet Pipit";
-            calltitle.innerText = "334189 Green-tipped Scarlet Pipit Call";
-            songtitle.innerText = "319588 Green-tipped Scarlet Pipit Song";
-        break;
-        case "11":
-            loadmap("Lesser Birchbeere");
-            wavesurfer2.load('Mitch Samples/Lesser-Birchbeere-173541.mp3');
-            wavesurfer3.load('Mitch Samples/Lesser-Birchbeere-173551.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Lesser Birchbeere";
-            calltitle.innerText = "173541 Lesser Birchbeere Call";
-            songtitle.innerText = "173551 Lesser Birchbeere Song";
-        break;
-        case "12":
-            loadmap("Orange Pine Plover");
-            wavesurfer2.load('Mitch Samples/Orange-Pine-Plover-385824.mp3');
-            wavesurfer3.load('Mitch Samples/Orange-Pine-Plover-383483.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Orange Pine Plover";
-            calltitle.innerText = "385824 Orange Pine Plover Call";
-            songtitle.innerText = "383483 Orange Pine Plover Song";
-        break;
-        case "13":
-            loadmap("Ordinary Snape");
-            wavesurfer2.load('Mitch Samples/Ordinary-Snape-320475.mp3');
-            wavesurfer3.load('Mitch Samples/Ordinary-Snape-313481.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Ordinary Snape";
-            calltitle.innerText = "320475 Ordinary Snape Call";
-            songtitle.innerText = "313481 Ordinary Snape Song";
-        break;
-        case "14":
-            loadmap("Pinkfinch");
-            wavesurfer2.load('Mitch Samples/Pinkfinch-132867.mp3');
-            wavesurfer3.load('Mitch Samples/Pinkfinch-132875.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Pinkfinch";
-            calltitle.innerText = "132867 Pinkfinch Call";
-            songtitle.innerText = "132875 Pinkfinch Drumming";
-        break;
-        case "15":
-            loadmap("Purple Tooting Tout");
-            wavesurfer2.load('Mitch Samples/Purple-Tooting-Tout-362568.mp3');
-            wavesurfer3.load('Mitch Samples/Purple-Tooting-Tout-362567.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Purple Tooting Tout";
-            calltitle.innerText = "362568 Purple Tooting Tout Call";
-            songtitle.innerText = "362567 Purple Tooting Tout Song";
-        break;
-        case "16":
-            loadmap("Qax");
-            wavesurfer2.load('Mitch Samples/Qax-210359.mp3');
-            wavesurfer3.load('Mitch Samples/Qax-211671.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Qax";
-            calltitle.innerText = "210359 Qax Call";
-            songtitle.innerText = "211671 Qax Song";
-        break;
-        case "17":
-            loadmap("Queenscoat");
-            wavesurfer2.load('Mitch Samples/Queenscoat-319610.mp3');
-            wavesurfer3.load('Mitch Samples/Queenscoat-324349.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Queenscoat";
-            calltitle.innerText = "319610 Queenscoat Call";
-            songtitle.innerText = "324349 Queenscoat Song";
-        break;
-        case "18":
-            loadmap("Scrawny Jay");
-            wavesurfer2.load('Mitch Samples/Scrawny-Jay-184571.mp3');
-            wavesurfer3.load('Mitch Samples/Scrawny-Jay-174636.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Scrawny Jay";
-            calltitle.innerText = "184571 Scrawny Jay Call";
-            songtitle.innerText = "174636 Scrawny Jay Song";
-        break;
-        case "19":
-            loadmap("Vermillion Trillian");
-            wavesurfer2.load('Mitch Samples/Vermillion-Trillian-150395.mp3');
-            wavesurfer3.load('Mitch Samples/Vermillion-Trillian-139431.mp3');
-            clbtn.innerText = "Compare with Mitch Audio - Vermillion Trillian";
-            calltitle.innerText = "150395 Vermillion Trillian Call";
-            songtitle.innerText = "139431 Vermillion Trillian Song";
-        break;
-        default:
-            loadmap("All");
-            wavesurfer2.empty();
-            wavesurfer3.empty();
-            clbtn.innerText = "Select a bird specie";
-            calltitle.innerText = "Call";
-            songtitle.innerText = "Song";
-    }
-    // create a tooltip
-    var tooltipdiv = d3.select("#svgTip");
+
+    // load map using d3
+    var svg;
+    var name;
+    function loadmap(n, k)
+    {
+        if (k == "All") k = 15;
+        toggle();
+        d3.select("svg").remove(); 
+
+        // create a tooltip
+        var tooltipdiv = d3.select("#svgTip");
         var Tooltip = tooltipdiv.style("opacity", 0)
       .attr("class", "tooltip");
 
-    var mouseover = function(d) {
+        var mouseover = function(d) {
         Tooltip
           .style("opacity", 1)
       }
-    var mousemove = function(d) {
+        var mousemove = function(d) {
         Tooltip
           .html("ID: " + d.FileID
                 + "\xa0\xa0\xa0" + d.English_name
@@ -415,27 +276,53 @@
                 + " Y: " + d.Y
             )
           .style("left", d3.select(this).attr("cx") + "px")     
-  .style("top", d3.select(this).attr("cy") + "px");
+        .style("top", d3.select(this).attr("cy") + "px");
       }
       var mouseleave = function(d) {
         Tooltip
           .style("opacity", 0)
       }
 
-    function loadmap(n)
-    {
-        toggle();
-        d3.select("svg").remove(); 
+      // handle kasios coordinates
+      const parseCsv = csv => {
+        let lines = csv.split("\n");
+        const header = lines.shift().split(",")
+        return  lines.map(line => {
+            const bits = JSON.parse("[" + line + "]")
+            let obj = {};
+            header.forEach((h, i) => obj[h] = bits[i])
+            return obj;
+            });
+        };
+
+        const csv = `ID,X,Y
+        1,140,119
+        2,63,153
+        3,70,136
+        4,78,150
+        5,60,90
+        6,126,103
+        7,71,121
+        8,78,62
+        9,61,145
+        10,45,39
+        11,132,106
+        12,61,20
+        13,35,160
+        14,40,125
+        15,110,121`
+
+        let testBirdsData = parseCsv(csv);
         var w = 600;
 		var h = 600;
 		var padding = 0;
         var dataset = [];
 
+        // import allbirds raw data
         d3.csv("AllBirdsv4(Cleaned ALL).csv", function(data) {
         dataset = data;
-		// calculate x average
 
-		var svg = d3.select("#svgHere").append("svg")
+		svg = d3.select("#svgHere").append("svg")
 			.attr("width", w + padding)
 			.attr("height", h + padding)
 			.attr("transform", "translate(" + padding + "," + 0 + ")")
@@ -449,7 +336,7 @@
 			.domain([0, 199])
 			.range([h - padding, padding]);
 
-            // draw circles
+        // draw circles
         svg.selectAll("plot")
             .data(dataset)
             .enter()
@@ -476,10 +363,202 @@
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
-            
-        })
 
-}
+            if(k < 16)
+            {
+                svg.selectAll("plot")
+                .data(testBirdsData)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d,i) { return (k == 15)? x(testBirdsData[i]["X"]): x(testBirdsData[k]["X"])} )
+                .attr("cy", function (d,i) { return (k == 15)? y(testBirdsData[i]["Y"]): y(testBirdsData[k]["Y"])} )
+                .attr("r", 10)
+                .style("stroke", "red")
+                .style("fill", "yellow")
+                .on("click", function (d, i) { if (k != "All") nameElement(testBirdsData[k]["ID"]) });
+            }
+
+            function nameElement(d) {
+                alert("Kasios " + d)
+            };
+
+        })
+    }
+
+    // handle event when a specie is selected
+    m.addEventListener("change", function() {
+        switch (m.value) {
+        case "0":
+            name ="All";
+            wavesurfer2.empty();
+            wavesurfer3.empty();
+            clbtn.innerText = "Select a bird specie";
+            calltitle.innerText = "Call";
+            songtitle.innerText = "Song";
+        break;
+        case "1":
+            name ="Rose-crested Blue Pipit";
+            wavesurfer2.load('Mitch Samples/Rose-Crested-Blue-Pipit-293916.mp3');
+            wavesurfer3.load('Mitch Samples/Rose-Crested-Blue-Pipit-293914.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Rose-crested Blue Pipit";
+            calltitle.innerText = "293916 Rose-crested Blue Pipit Call";
+            songtitle.innerText = "293916 Rose-crested Blue Pipit Song";
+        break;
+        case "2":
+            name ="Bent-beak Riffraff";
+            wavesurfer2.load('Mitch Samples/Bent-Beak-Riffraff-20422.mp3');
+            wavesurfer3.load('Mitch Samples/Bent-Beak-Riffraff-35360.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Bent-beak Riffraff";
+            calltitle.innerText = "20422 Bent-beak Riffraff Call";
+            songtitle.innerText = "35360 Bent-beak Riffraff Song";
+        break;
+        case "3":
+            name ="Blue-collared Zipper";
+            wavesurfer2.load('Mitch Samples/Blue-collared-Zipper-374413.mp3');
+            wavesurfer3.load('Mitch Samples/Blue-collared-Zipper-341352.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Blue-collared Zipper";
+            calltitle.innerText = "374413 Blue-collared Zipper Call";
+            songtitle.innerText = "341352 Blue-collared Zipper Song";
+        break;
+        case "4":
+            name ="Bombadil";
+            wavesurfer2.load('Mitch Samples/Bombadil-317206.mp3');
+            wavesurfer3.load('Mitch Samples/Bombadil-314298.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Bombadil";
+            calltitle.innerText = "317206 Bombadil Call";
+            songtitle.innerText = "314298 Bombadil Song";
+        break;
+        case "5":
+            name ="Broad-winged Jojo";
+            wavesurfer2.load('Mitch Samples/Broad-winged-Jojo-33567.mp3');
+            wavesurfer3.load('Mitch Samples/Broad-winged-Jojo-33565.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Broad-winged Jojo";
+            calltitle.innerText = "33567 Broad-winged Jojo Call";
+            songtitle.innerText = "33565 Broad-winged Jojo Song";
+        break;
+        case "6":
+            name ="Canadian Cootamum";
+            wavesurfer2.load('Mitch Samples/Canadian-Cootamum-325432.mp3');
+            wavesurfer3.load('Mitch Samples/Canadian-Cootamum-313736.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Canadian Cootamum";
+            calltitle.innerText = "325432 Canadian Cootamum Call";
+            songtitle.innerText = "313736 Canadian Cootamum Song";
+        break;
+        case "7":
+            name ="Carries Champagne Pipit";
+            wavesurfer2.load('Mitch Samples/Carries-Champagne-Pipit-197379.mp3');
+            wavesurfer3.load('Mitch Samples/Carries-Champagne-Pipit-197378.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Carries Champagne Pipit";
+            calltitle.innerText = "197379 Carries Champagne Pipit Call";
+            songtitle.innerText = "197378 Carries Champagne Pipit Song";
+        break;
+        case "8":
+            name ="Darkwing Sparrow";
+            wavesurfer2.load('Mitch Samples/Darkwing-Sparrow-404159.mp3');
+            wavesurfer3.load('Mitch Samples/Darkwing-Sparrow-405192.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Darkwing Sparrow";
+            calltitle.innerText = "404159 Darkwing Sparrow Call";
+            songtitle.innerText = "405192 Darkwing Sparrow Song";
+        break;
+        case "9":
+            name = "Eastern Corn Skeet";
+            wavesurfer2.load('Mitch Samples/Eastern-Corn-Skeet-179720.mp3');
+            wavesurfer3.load('Mitch Samples/Eastern-Corn-Skeet-178126.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Eastern Corn Skeet";
+            calltitle.innerText = "179720 Eastern Corn Skeet Call";
+            songtitle.innerText = "178126 Eastern Corn Skeet Song";
+        break;
+        case "10":
+            name ="Green-tipped Scarlet Pipit";
+            wavesurfer2.load('Mitch Samples/Green-Tipped-Scarlet-Pipit-334189.mp3');
+            wavesurfer3.load('Mitch Samples/Green-Tipped-Scarlet-Pipit-319588.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Green-tipped Scarlet Pipit";
+            calltitle.innerText = "334189 Green-tipped Scarlet Pipit Call";
+            songtitle.innerText = "319588 Green-tipped Scarlet Pipit Song";
+        break;
+        case "11":
+            name ="Lesser Birchbeere";
+            wavesurfer2.load('Mitch Samples/Lesser-Birchbeere-173541.mp3');
+            wavesurfer3.load('Mitch Samples/Lesser-Birchbeere-173551.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Lesser Birchbeere";
+            calltitle.innerText = "173541 Lesser Birchbeere Call";
+            songtitle.innerText = "173551 Lesser Birchbeere Song";
+        break;
+        case "12":
+            name ="Orange Pine Plover";
+            wavesurfer2.load('Mitch Samples/Orange-Pine-Plover-385824.mp3');
+            wavesurfer3.load('Mitch Samples/Orange-Pine-Plover-383483.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Orange Pine Plover";
+            calltitle.innerText = "385824 Orange Pine Plover Call";
+            songtitle.innerText = "383483 Orange Pine Plover Song";
+        break;
+        case "13":
+            name = "Ordinary Snape";
+            wavesurfer2.load('Mitch Samples/Ordinary-Snape-320475.mp3');
+            wavesurfer3.load('Mitch Samples/Ordinary-Snape-313481.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Ordinary Snape";
+            calltitle.innerText = "320475 Ordinary Snape Call";
+            songtitle.innerText = "313481 Ordinary Snape Song";
+        break;
+        case "14":
+            name ="Pinkfinch";
+            wavesurfer2.load('Mitch Samples/Pinkfinch-132867.mp3');
+            wavesurfer3.load('Mitch Samples/Pinkfinch-132875.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Pinkfinch";
+            calltitle.innerText = "132867 Pinkfinch Call";
+            songtitle.innerText = "132875 Pinkfinch Drumming";
+        break;
+        case "15":
+            name ="Purple Tooting Tout";
+            wavesurfer2.load('Mitch Samples/Purple-Tooting-Tout-362568.mp3');
+            wavesurfer3.load('Mitch Samples/Purple-Tooting-Tout-362567.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Purple Tooting Tout";
+            calltitle.innerText = "362568 Purple Tooting Tout Call";
+            songtitle.innerText = "362567 Purple Tooting Tout Song";
+        break;
+        case "16":
+            name = "Qax";
+            wavesurfer2.load('Mitch Samples/Qax-210359.mp3');
+            wavesurfer3.load('Mitch Samples/Qax-211671.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Qax";
+            calltitle.innerText = "210359 Qax Call";
+            songtitle.innerText = "211671 Qax Song";
+        break;
+        case "17":
+            name ="Queenscoat";
+            wavesurfer2.load('Mitch Samples/Queenscoat-319610.mp3');
+            wavesurfer3.load('Mitch Samples/Queenscoat-324349.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Queenscoat";
+            calltitle.innerText = "319610 Queenscoat Call";
+            songtitle.innerText = "324349 Queenscoat Song";
+        break;
+        case "18":
+            name ="Scrawny Jay";
+            wavesurfer2.load('Mitch Samples/Scrawny-Jay-184571.mp3');
+            wavesurfer3.load('Mitch Samples/Scrawny-Jay-174636.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Scrawny Jay";
+            calltitle.innerText = "184571 Scrawny Jay Call";
+            songtitle.innerText = "174636 Scrawny Jay Song";
+        break;
+        case "19":
+            name ="Vermillion Trillian";
+            wavesurfer2.load('Mitch Samples/Vermillion-Trillian-150395.mp3');
+            wavesurfer3.load('Mitch Samples/Vermillion-Trillian-139431.mp3');
+            clbtn.innerText = "Compare with Mitch Audio - Vermillion Trillian";
+            calltitle.innerText = "150395 Vermillion Trillian Call";
+            songtitle.innerText = "139431 Vermillion Trillian Song";
+        break;
+        default:
+            name ="All";
+            wavesurfer2.empty();
+            wavesurfer3.empty();
+            clbtn.innerText = "Select a bird specie";
+            calltitle.innerText = "Call";
+            songtitle.innerText = "Song";
+
+    }
+    //reload map
+    loadmap(name,kselected);
 });
 </script>
 </body>
